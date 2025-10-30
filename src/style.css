@@ -1,0 +1,43 @@
+@import 'tailwindcss';
+
+.font-roboto {
+  font-family: roboto;
+}
+
+.font-inter {
+  font-family: inter;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox */
+.hide-scrollbar {
+  scrollbar-width: none; /* hides scrollbar */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+/* Example usage */
+.scrollable {
+  overflow-y: scroll; /* still scrollable */
+}
+
+li > p {
+  display: inline;
+}
+
+/* Styling the wrapper element added by tiptap-extension-resize-image */
+.ProseMirror .image-view-wrapper.float-left {
+  float: left;
+  margin-right: 15px;
+}
+.ProseMirror .image-view-wrapper.float-right {
+  float: right;
+  margin-left: 15px;
+}
+.ProseMirror .image-view-wrapper.float-none {
+  float: none;
+  margin: 0;
+}
+

@@ -1,0 +1,60 @@
+<template>
+  <!-- policies card -->
+  <div class="cursor-pointer">
+    <div
+      class="pl-4 pt-4 bg-white rounded-[16px] card_shadow space-y-4 transition hover:bg-gray-200 active:bg-gray-100">
+      <div class="pr-4 space-y-4">
+        <!-- title block -->
+        <h3 class="text-[16px] lg:text-[24px] font-bold text-[#343434]">
+          {{ title_eng }}</h3>
+
+        <!-- logos session -->
+        <div class="flex gap-4">
+          <div v-for="(logo, index) in logos" :key="index">
+            <div class="w-12 h-12">
+              <img :src="logo" class="w-full h-full" alt="" />
+            </div>
+          </div>
+        </div>
+
+        <!-- date block -->
+        <div class="text-right">
+          <span class="text-[12px] lg:text-[14px] font-roboto text-black">{{ date }}</span>
+        </div>
+
+        <!-- Name of orgs -->
+        <div>
+          <h3 v-for="(org, index) in orgs" :key="index" class="text-[14px] lg:text-[16px] font-inter text-black">
+            {{ org }} {{ savedAt }}
+          </h3>
+        </div>
+      </div>
+
+      <!-- read more -->
+      <div v-if="savedAt" class="flex justify-end">
+        <div class="bg-[#F94B65] py-1 pl-2 pr-4 text-white rounded-tl-[16px] rounded-br-[16px] flex gap-2 items-center">
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M12.9882 4.58333C13.0824 4.30833 13.1765 4.03333 13.1765 3.66667C13.1765 1.65 11.4824 0 9.41176 0C8 0 6.68235 0.825 6.11765 2.01667C5.83529 1.925 5.45882 1.83333 5.17647 1.83333C3.85882 1.83333 2.82353 2.84167 2.82353 4.125C2.82353 4.30833 2.82353 4.49167 2.91765 4.58333C1.22353 4.85833 0 6.14167 0 7.79167C0 9.53333 1.50588 11 3.29412 11H12.7059C14.4941 11 16 9.53333 16 7.79167C16 6.14167 14.6824 4.76667 12.9882 4.58333ZM7.05882 9.99167L4.04706 7.05833L5.36471 5.775L7.05882 7.425L10.6353 3.94167L11.9529 5.225L7.05882 9.99167Z"
+              fill="#FFFFFF" />
+          </svg>
+          <span class="text-sm font-semibold">SAVED</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</template>
+
+<script setup>
+const props = defineProps({
+  title_eng: String,
+  title_bur: String,
+  orgs: Array,
+  date: String,
+  logos: Array,
+  savedAt: [Number, null, undefined]
+})
+
+const emit = defineEmits(['delete']);
+</script>
