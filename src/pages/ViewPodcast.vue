@@ -1,5 +1,5 @@
 <template>
-    <AppbarComponent />
+    <!-- <AppbarComponent /> -->
     <div v-if="podcast" class="relative">
         <div
             class="home-block bg-[url(/images/strike02_cover.jpg)] bg-cover bg-no-repeat relative min-h-screen overflow-y-scroll scrollbar-hide">

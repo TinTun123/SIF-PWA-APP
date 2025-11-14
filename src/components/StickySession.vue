@@ -26,7 +26,7 @@
             <button @click="showSession = false" class="text-gray-600">✕</button>
         </div>
         <div class="flex justify-end gap-4 mx-4">
-            <div
+            <!-- <div
                 class="bg-white shadow-md px-2 py-1 text-base text-[#343434] border-[#343434] rounded-full flex items-center gap-2">
                 <span>Share</span>
                 <div class="w-4 h-4">
@@ -37,13 +37,29 @@
                     </svg>
 
                 </div>
-            </div>
+            </div> -->
 
-            <div
+            <div @click.stop="emits('saveCourse')"
                 class="bg-white shadow-md px-2 py-1 text-base text-[#343434] border-[#343434] rounded-full flex items-center gap-2">
-                <span>Save</span>
-                <div class="w-4 h-4">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <span class="text-[#4D4D4D] text-[12px] font-semibold">{{ saveStatusText }}</span>
+
+                <div class="">
+                    <svg v-if="courseSavedAt || progress === 100" width="16" height="11" viewBox="0 0 16 11" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12.9882 4.58333C13.0824 4.30833 13.1765 4.03333 13.1765 3.66667C13.1765 1.65 11.4824 0 9.41176 0C8 0 6.68235 0.825 6.11765 2.01667C5.83529 1.925 5.45882 1.83333 5.17647 1.83333C3.85882 1.83333 2.82353 2.84167 2.82353 4.125C2.82353 4.30833 2.82353 4.49167 2.91765 4.58333C1.22353 4.85833 0 6.14167 0 7.79167C0 9.53333 1.50588 11 3.29412 11H12.7059C14.4941 11 16 9.53333 16 7.79167C16 6.14167 14.6824 4.76667 12.9882 4.58333ZM7.05882 9.99167L4.04706 7.05833L5.36471 5.775L7.05882 7.425L10.6353 3.94167L11.9529 5.225L7.05882 9.99167Z"
+                            fill="#51F94B" />
+                    </svg>
+                    <svg v-else-if="progress > 0 && progress < 100" class="size-5 animate-spin text-blue-400"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                    <svg v-else width="16" height="11" viewBox="0 0 16 16" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M8.88877 7.24444V0.888889C8.88877 0.653141 8.79512 0.427048 8.62843 0.260349C8.46173 0.0936505 8.23563 0 7.99989 0C7.76414 0 7.53805 0.0936505 7.37135 0.260349C7.20465 0.427048 7.111 0.653141 7.111 0.888889V7.24444L5.13766 4.77689C5.06615 4.68169 4.97624 4.60183 4.87326 4.54205C4.77029 4.48227 4.65636 4.44379 4.53823 4.42889C4.4201 4.41398 4.30018 4.42297 4.18559 4.4553C4.07099 4.48763 3.96407 4.54266 3.87115 4.61711C3.77823 4.69157 3.70122 4.78393 3.64468 4.88872C3.58815 4.9935 3.55324 5.10858 3.54203 5.22712C3.53083 5.34566 3.54355 5.46524 3.57944 5.57877C3.61534 5.69229 3.67368 5.79745 3.751 5.888L7.30655 10.3324C7.38984 10.4363 7.49538 10.52 7.61539 10.5776C7.73539 10.6352 7.86679 10.6651 7.99989 10.6651C8.13298 10.6651 8.26438 10.6352 8.38439 10.5776C8.50439 10.52 8.60993 10.4363 8.69322 10.3324L12.2488 5.888C12.3261 5.79745 12.3844 5.69229 12.4203 5.57877C12.4562 5.46524 12.4689 5.34566 12.4577 5.22712C12.4465 5.10858 12.4116 4.9935 12.3551 4.88872C12.2986 4.78393 12.2215 4.69157 12.1286 4.61711C12.0357 4.54266 11.9288 4.48763 11.8142 4.4553C11.6996 4.42297 11.5797 4.41398 11.4615 4.42889C11.3434 4.44379 11.2295 4.48227 11.1265 4.54205C11.0235 4.60183 10.9336 4.68169 10.8621 4.77689L8.88877 7.24444Z"
                             fill="#343434" />
@@ -64,7 +80,7 @@
         <div class="mx-4 pb-4 flex-1 overflow-y-auto hide-scrollbar">
             <ul class="pb-4 mb-4">
                 <li @click.stop="emits('selectSession', session)" v-for="(session, index) in sessions" :key="index"
-                    class="border-b my-4 border-gray flex flex-col">
+                    class="border-b my-4 border-gray-500 flex flex-col">
                     <a @click="showSession = false" class="text-base" :class="[
                         viewSessionObject.type === 'session' && viewSessionObject.id === session.id ? 'text-[#F94B65]' : 'text-[#343434]'
                     ]">{{ session.title_eng }}</a>
@@ -73,7 +89,7 @@
                             v-for="(subsession, i) in session.subsessions" :key="i" class="py-2 ml-4 flex flex-col"
                             :class="[
                                 'py-2 ml-4 flex flex-col',
-                                i !== session.subsessions.length - 1 ? 'border-b border-gray' : '',
+                                i !== session.subsessions.length - 1 ? 'border-b border-gray-400' : '',
                                 viewSessionObject.type === 'subsession' && viewSessionObject.id === subsession.id ? 'text-[#F94B65]' : 'text-[#343434]'
                             ]">
                             <a @click="showSession = false" class="text-[14px]">{{
@@ -165,8 +181,11 @@ import { ref } from 'vue';
 const showSession = ref(false);
 const props = defineProps({
     sessions: Array,
-    viewSessionObject: Object
+    viewSessionObject: Object,
+    progress: Number || null,
+    saveStatusText: String || null,
+    courseSavedAt: Number || undefined
 })
 
-const emits = defineEmits(['selectSession', 'selectSubsession'])
+const emits = defineEmits(['selectSession', 'selectSubsession', 'saveCourse'])
 </script>

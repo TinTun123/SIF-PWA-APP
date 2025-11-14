@@ -1,5 +1,5 @@
 <template>
-  <AppbarComponent />
+  <!-- <AppbarComponent /> -->
   <div style="scrollbar-width: none"
     class="home-block bg-[url(/images/strike02_cover.jpg)] bg-cover bg-no-repeat relative min-h-screen overflow-y-scroll">
     <!-- bg gradient block -->
@@ -8,12 +8,7 @@
       <div class="lg:mx-[96px]">
         <!-- Logo Block -->
         <LogoComponent class="hidden md:flex mt-8"></LogoComponent>
-        <!-- search button -->
-        <div
-          class="w-[142px] rounded-l-[8px] border border-white flex items-center justify-between gap-2 px-4 py-2 mt-6 ml-auto md:rounded-r-[8px] md:mr-[24px]">
-          <span class="text-white">Search</span>
-          <img src="/images/search-icon.svg" class="w-8 h-8" alt="" />
-        </div>
+
 
         <!-- Nav bar -->
         <NavBar class="flex mt-8" title="Statements"></NavBar>
@@ -41,6 +36,7 @@
       </div>
     </div>
   </div>
+
   <TeleportModal my-class="bg-none" :show="open" @close="open = false">
     <ViewStatements :images="currentStatement"></ViewStatements>
   </TeleportModal>

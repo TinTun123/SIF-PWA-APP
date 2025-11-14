@@ -9,9 +9,18 @@
             <video :src="vidURL + '#t=1'" class="aspect-video rounded-t-lg" controls></video>
 
             <!-- save button -->
-            <div class="flex items-center gap-2 absolute top-0 right-0 px-2 py-1 rounded-bl-lg bg-[#F94B65]">
+            <div @click.stop="saveInterview({ id: id, date: date, tags: tags, persons: persons, type: vidType, videoFile: vidURL, quote: quote })"
+                :class="[savedAt || progress === 100 ? 'bg-[#51F94B]' : 'bg-[#F94B65] cursor-pointer hover:bg-[#F94B65]/80 transition']"
+                class="flex items-center gap-2 absolute top-0 right-0 px-2 py-1 rounded-bl-lg group">
                 <div class="w-3 h-3">
-                    <svg class="w-full h-full" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg v-if="savedAt || progress === 100" width="16" height="11" viewBox="0 0 16 11" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12.9882 4.58333C13.0824 4.30833 13.1765 4.03333 13.1765 3.66667C13.1765 1.65 11.4824 0 9.41176 0C8 0 6.68235 0.825 6.11765 2.01667C5.83529 1.925 5.45882 1.83333 5.17647 1.83333C3.85882 1.83333 2.82353 2.84167 2.82353 4.125C2.82353 4.30833 2.82353 4.49167 2.91765 4.58333C1.22353 4.85833 0 6.14167 0 7.79167C0 9.53333 1.50588 11 3.29412 11H12.7059C14.4941 11 16 9.53333 16 7.79167C16 6.14167 14.6824 4.76667 12.9882 4.58333ZM7.05882 9.99167L4.04706 7.05833L5.36471 5.775L7.05882 7.425L10.6353 3.94167L11.9529 5.225L7.05882 9.99167Z"
+                            fill="white" />
+                    </svg>
+                    <svg v-else class="w-full h-full" viewBox="0 0 16 16" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M8.88877 7.24444V0.888889C8.88877 0.653141 8.79512 0.427048 8.62843 0.260349C8.46173 0.0936505 8.23563 0 7.99989 0C7.76414 0 7.53805 0.0936505 7.37135 0.260349C7.20465 0.427048 7.111 0.653141 7.111 0.888889V7.24444L5.13766 4.77689C5.06615 4.68169 4.97624 4.60183 4.87326 4.54205C4.77029 4.48227 4.65636 4.44379 4.53823 4.42889C4.4201 4.41398 4.30018 4.42297 4.18559 4.4553C4.07099 4.48763 3.96407 4.54266 3.87115 4.61711C3.77823 4.69157 3.70122 4.78393 3.64468 4.88872C3.58815 4.9935 3.55324 5.10858 3.54203 5.22712C3.53083 5.34566 3.54355 5.46524 3.57944 5.57877C3.61534 5.69229 3.67368 5.79745 3.751 5.888L7.30655 10.3324C7.38984 10.4363 7.49538 10.52 7.61539 10.5776C7.73539 10.6352 7.86679 10.6651 7.99989 10.6651C8.13298 10.6651 8.26438 10.6352 8.38439 10.5776C8.50439 10.52 8.60993 10.4363 8.69322 10.3324L12.2488 5.888C12.3261 5.79745 12.3844 5.69229 12.4203 5.57877C12.4562 5.46524 12.4689 5.34566 12.4577 5.22712C12.4465 5.10858 12.4116 4.9935 12.3551 4.88872C12.2986 4.78393 12.2215 4.69157 12.1286 4.61711C12.0357 4.54266 11.9288 4.48763 11.8142 4.4553C11.6996 4.42297 11.5797 4.41398 11.4615 4.42889C11.3434 4.44379 11.2295 4.48227 11.1265 4.54205C11.0235 4.60183 10.9336 4.68169 10.8621 4.77689L8.88877 7.24444Z"
                             fill="white" />
@@ -21,7 +30,8 @@
                     </svg>
 
                 </div>
-                <span class="text-white text-sm">Save</span>
+                <span class="text-white text-sm font-medium">{{ savedAt || progress == 100 ? "SAVED" : 'Save' }}{{
+                    progress > 0 && progress !== 100 ? `Saving ${progress}%` : '' }}</span>
             </div>
         </div>
 
@@ -35,7 +45,7 @@
         <div class="space-y-4 md:grid md:grid-cols-12">
             <div v-for="(person, index) in persons" class="md:col-span-6">
                 <!-- Name flex -->
-                <div class="flex items-center gap-2 px-4 py-0">
+                <div v-if="person.name" class="flex items-center gap-2 px-4 py-0">
                     <div>
                         <!-- Profile icon -->
                         <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -50,7 +60,7 @@
                 </div>
 
                 <!-- Position icon -->
-                <div class="mt-4">
+                <div v-if="person.position" class="mt-4">
                     <div class="flex items-center gap-2 px-4 py-0">
                         <div>
 
@@ -66,7 +76,7 @@
                 </div>
 
                 <!-- Group icon -->
-                <div class="mt-4">
+                <div v-if="person.group" class="mt-4">
                     <div class="flex items-center gap-2 px-4 py-0">
                         <div>
 
@@ -81,7 +91,6 @@
                         <span class="text-sm text-white font-semibold tracking-wider">{{ person.group }}</span>
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -129,7 +138,7 @@
 
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, onBeforeUnmount, onMounted, ref } from 'vue';
 
 const props = defineProps({
     persons: {
@@ -140,6 +149,44 @@ const props = defineProps({
     vidURL: String,
     vidType: String,
     tags: Array,
-    quote: String
+    savedAt: [Number, null, undefined],
+    quote: String,
+    id: Number
+})
+const progress = ref(null)
+
+
+function saveInterview(interview) {
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+
+        console.log("Click Save interview: ", interview.id);
+
+        navigator.serviceWorker.controller.postMessage({
+            type: 'SAVE_INTERVIEW',
+            payload: interview,
+        })
+        progress.value = 0
+    } else {
+        console.warn('Service worker not active')
+    }
+}
+
+// ✅ Listen for progress updates
+function handleSWMessage(event) {
+    const { type, progress: pct, interviewId } = event.data || {}
+
+    if (type === 'SAVE_PROGRESS' && interviewId === props.id) {
+        progress.value = pct
+    }
+    if (type === 'SAVE_DONE' && interviewId === props.id) {
+        progress.value = 100
+    }
+}
+
+onMounted(() => {
+    navigator.serviceWorker?.addEventListener('message', handleSWMessage)
+})
+onBeforeUnmount(() => {
+    navigator.serviceWorker?.removeEventListener('message', handleSWMessage)
 })
 </script>

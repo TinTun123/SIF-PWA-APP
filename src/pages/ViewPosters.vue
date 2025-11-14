@@ -7,11 +7,12 @@
                     <path d="M10 2L2 10L10 18" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </div>
-            <div class="h-[90%] lg:w-100 lg:mx-auto relative flex items-center justify-center">
+            <div
+                class="h-[90%] lg:w-100 lg:mx-auto relative flex items-center justify-center rounded-lg overflow-hidden">
                 <Motion :key="currentImage" :initial="{ opacity: 0, x: direction > 0 ? 100 : -100 }"
                     :animate="{ opacity: 1, x: 0 }" :exit="{ opacity: 0, x: direction > 0 ? -100 : 100 }"
-                    :transition="{ duration: 0.5 }" class="absolute w-full h-full">
-                    <img :src="images[currentImage]" class="w-full h-full rounded-lg object-cover" alt="Poster" />
+                    :transition="{ duration: 0.5 }" class="absolute w-full h-full rounded-lg">
+                    <img :src="images[currentImage]" class="w-full h-full rounded-lg object-contain" alt="Poster" />
                 </Motion>
             </div>
             <div @click="nextImage" class="p-2 group cursor-pointer lg:my-auto hidden lg:block">
@@ -54,13 +55,13 @@
 
 
             <!-- save button -->
-            <div
-                class="flex items-center gap-2 border-2 border-white hover:border-gray-400 rounded-full px-2 py-1 cursor-pointer transition group">
+            <div @click.stop="downloadAllImages"
+                class="flex items-center gap-2 border-2 border-white hover:border-gray-400 active:border-gray-400 rounded-full px-2 py-1 cursor-pointer transition group">
                 <span
-                    class="text-white text-[14px] ms:text-base font-semibold group-hover:text-gray-400 transition">Save</span>
-                <div class="w-[14px] h-[14px] md:w-4 md:h-4">
-                    <svg class="w-full h-full group-hover:fill-gray-400 fill-white transition" viewBox="0 0 16 16"
-                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                    class="text-white text-[14px] ms:text-base font-semibold group-hover:text-gray-400 group-active:text-gray-400 transition">Save</span>
+                <div class="w-3.5 h-3.5 md:w-4 md:h-4">
+                    <svg class="w-full h-full group-hover:fill-gray-400 group-active:fill-gray-400 fill-white transition"
+                        viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M8.88877 7.24444V0.888889C8.88877 0.653141 8.79512 0.427048 8.62843 0.260349C8.46173 0.0936505 8.23563 0 7.99989 0C7.76414 0 7.53805 0.0936505 7.37135 0.260349C7.20465 0.427048 7.111 0.653141 7.111 0.888889V7.24444L5.13766 4.77689C5.06615 4.68169 4.97624 4.60183 4.87326 4.54205C4.77029 4.48227 4.65636 4.44379 4.53823 4.42889C4.4201 4.41398 4.30018 4.42297 4.18559 4.4553C4.07099 4.48763 3.96407 4.54266 3.87115 4.61711C3.77823 4.69157 3.70122 4.78393 3.64468 4.88872C3.58815 4.9935 3.55324 5.10858 3.54203 5.22712C3.53083 5.34566 3.54355 5.46524 3.57944 5.57877C3.61534 5.69229 3.67368 5.79745 3.751 5.888L7.30655 10.3324C7.38984 10.4363 7.49538 10.52 7.61539 10.5776C7.73539 10.6352 7.86679 10.6651 7.99989 10.6651C8.13298 10.6651 8.26438 10.6352 8.38439 10.5776C8.50439 10.52 8.60993 10.4363 8.69322 10.3324L12.2488 5.888C12.3261 5.79745 12.3844 5.69229 12.4203 5.57877C12.4562 5.46524 12.4689 5.34566 12.4577 5.22712C12.4465 5.10858 12.4116 4.9935 12.3551 4.88872C12.2986 4.78393 12.2215 4.69157 12.1286 4.61711C12.0357 4.54266 11.9288 4.48763 11.8142 4.4553C11.6996 4.42297 11.5797 4.41398 11.4615 4.42889C11.3434 4.44379 11.2295 4.48227 11.1265 4.54205C11.0235 4.60183 10.9336 4.68169 10.8621 4.77689L8.88877 7.24444Z" />
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -85,6 +86,35 @@ const props = defineProps({
 
 const currentImage = ref(0)
 const direction = ref(1)
+
+
+async function downloadAllImages() {
+    for (let i = 0; i < props.images.length; i++) {
+        const url = props.images[i];
+        console.log("IMG URL : ", url);
+
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+
+            const ext = url.split('.').pop().split('?')[0] || 'jpg';
+            const fileName = `${props.date || 'image'}_${i + 1}.${ext}`;
+
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+
+            // Cleanup
+            URL.revokeObjectURL(link.href);
+            link.remove();
+
+        } catch (err) {
+            console.error("Failed to download image:", url, err);
+        }
+    }
+}
 
 function nextImage() {
     direction.value = 1

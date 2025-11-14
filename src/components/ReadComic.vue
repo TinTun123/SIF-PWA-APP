@@ -1,6 +1,6 @@
 <template>
     <div class="mx-4 md:mx-[93px] flex flex-col gap-4 relative overflow-hidden">
-        <div class="lg:flex lg:gap-4 lg:justify-center lg:items-stratch">
+        <div class="lg:flex lg:gap-4 lg:justify-center lg:items-center">
             <div @click="prevImage" class="p-2 group cursor-pointer lg:my-auto hidden lg:block">
                 <svg width="12" height="20" class="group-hover:stroke-gray-400 stroke-white transition"
                     viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -54,11 +54,11 @@
 
 
             <!-- save button -->
-            <div
+            <div @click.stop="downloadAllImages"
                 class="flex items-center gap-2 border-2 border-white hover:border-gray-400 rounded-full px-2 py-1 cursor-pointer transition group">
                 <span
                     class="text-white text-[14px] ms:text-base font-semibold group-hover:text-gray-400 transition">Save</span>
-                <div class="w-[14px] h-[14px] md:w-4 md:h-4">
+                <div class="w-3.5 h-3.5 md:w-4 md:h-4">
                     <svg class="w-full h-full group-hover:fill-gray-400 fill-white transition" viewBox="0 0 16 16"
                         fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -84,6 +84,37 @@ const props = defineProps({
 
 const currentImage = ref(0)
 const direction = ref(1)
+
+
+
+async function downloadAllImages() {
+    for (let i = 0; i < props.imgs.length; i++) {
+        const url = props.imgs[i];
+        console.log("IMG URL : ", url);
+
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+
+            const ext = url.split('.').pop().split('?')[0] || 'jpg';
+            const fileName = `${props.date || 'comic'}_${i + 1}.${ext}`;
+
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+
+            // Cleanup
+            URL.revokeObjectURL(link.href);
+            link.remove();
+
+        } catch (err) {
+            console.error("Failed to download image:", url, err);
+        }
+    }
+}
+
 
 function nextImage() {
     direction.value = 1

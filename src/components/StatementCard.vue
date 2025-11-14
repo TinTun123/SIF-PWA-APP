@@ -33,7 +33,7 @@
                             </svg>
                         </div>
                         <div class="text-[#DDDDDD] text-lg">
-                            Please connet the internet
+                            Please connect the internet
                         </div>
                     </div>
                     <img v-else :src="cover_url" @load="checkAspect" ref="imageEl" class="h-full w-full rounded-lg"

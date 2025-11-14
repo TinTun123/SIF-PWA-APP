@@ -1,5 +1,5 @@
 <template>
-  <AppbarComponent />
+  <!-- <AppbarComponent /> -->
   <div
     class="home-block bg-[url(/images/strike02_cover.jpg)] bg-cover bg-no-repeat relative min-h-screen overflow-y-scroll scrollbar-hide">
     <div class="absolute inset-0 bg-block z-0"></div>
@@ -7,11 +7,7 @@
     <div class="relative z-10">
       <div class="lg:mx-[96px]">
         <LogoComponent class="hidden md:flex mt-8" />
-        <div
-          class="w-[142px] rounded-l-[8px] border border-white flex items-center justify-between gap-2 px-4 py-2 mt-6 ml-auto md:rounded-r-[8px] md:mr-[32px]">
-          <span class="text-white">Search</span>
-          <img src="/images/search-icon.svg" class="w-8 h-8" alt="" />
-        </div>
+
 
         <NavBar class="flex mt-8 md:ml-[32px]" title="Posters" />
 

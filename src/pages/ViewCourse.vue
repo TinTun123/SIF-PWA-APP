@@ -3,7 +3,7 @@
 
         <!-- Side session navigation tag for desktop screen -->
         <div
-            class="hidden lg:block col-span-4 overflow-y-auto hide-scrollbar bg-[#F2F0F0] lg:shadow-lg lg:border-r lg:border-[#F2F0F0]">
+            class="hidden lg:block col-span-4 overflow-y-auto hide-scroll bg-[#F2F0F0] lg:shadow-lg lg:border-r lg:border-[#F2F0F0]">
             <div class="ml-6 mt-16 mb-8 text-[20px] font-bold text-[#343434]">
                 <h3 class="tracking-[8px]">{{ course.title_eng }}</h3>
             </div>
@@ -24,13 +24,12 @@
                                 viewSessionObject.type === 'subsession' && viewSessionObject.id === subsession.id ? 'text-[#F94B65]' : 'text-[#343434]'
                             ]">
                             <a class="text-[14px] group-hover:text-[#F94B65]">{{ subsession.title_eng
-                                }}</a>
+                            }}</a>
                         </li>
                     </ul>
                 </li>
             </ul>
-            <div v-else
-                class="h-[120px] mt-[96px] flex flex-col items-center justify-center lg:col-span-12 lg:text-center">
+            <div v-else class="h-[120px] mt-24 flex flex-col items-center justify-center lg:col-span-12 lg:text-center">
                 <svg class="h-full animate-spin" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M34 8.5C48.0817 8.5 59.5 19.9183 59.5 34" stroke="#F94B65" stroke-width="4"
                         stroke-linecap="round" stroke-linejoin="round" />
@@ -39,8 +38,7 @@
             </div>
         </div>
 
-        <div ref="readView"
-            class="mt-8 md:my-12 mx-4 md:mx-8 lg:mx-[96px] lg:col-span-8 overflow-y-auto hide-scrollbar">
+        <div ref="readView" class="mt-8 md:my-12 mx-4 md:mx-8 lg:mx-24 lg:col-span-8 overflow-y-auto hide-scroll">
             <div class="flex gap-4">
                 <div>
                     <RouterLink to="/Strategies">
@@ -161,10 +159,27 @@
 
 
                     <!-- save button -->
-                    <div class="flex gap-2 px-2 py-1 items-center border border-gray-400 rounded-full">
-                        <span class="text-[#4D4D4D] text-sm">Save</span>
-                        <div class="w-3 h-3">
-                            <svg class="w-full h-full" viewBox="0 0 16 16" fill="none"
+                    <div @click.stop="saveCourse()"
+                        :class="['flex gap-2 px-2 py-1 items-center border rounded-full', course.savedAt || progress == 100 ? 'border-[#51F94B]' : 'border-gray-400 shadow-lg cursor-pointer hover:shadow-sm active:shadow-none']"
+                        class=" transition">
+                        <span class="text-[#4D4D4D] text-[12px] font-semibold">{{ saveStatusText }}</span>
+
+                        <div class="">
+                            <svg v-if="course.savedAt || progress === 100" width="16" height="11" viewBox="0 0 16 11"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12.9882 4.58333C13.0824 4.30833 13.1765 4.03333 13.1765 3.66667C13.1765 1.65 11.4824 0 9.41176 0C8 0 6.68235 0.825 6.11765 2.01667C5.83529 1.925 5.45882 1.83333 5.17647 1.83333C3.85882 1.83333 2.82353 2.84167 2.82353 4.125C2.82353 4.30833 2.82353 4.49167 2.91765 4.58333C1.22353 4.85833 0 6.14167 0 7.79167C0 9.53333 1.50588 11 3.29412 11H12.7059C14.4941 11 16 9.53333 16 7.79167C16 6.14167 14.6824 4.76667 12.9882 4.58333ZM7.05882 9.99167L4.04706 7.05833L5.36471 5.775L7.05882 7.425L10.6353 3.94167L11.9529 5.225L7.05882 9.99167Z"
+                                    fill="#51F94B" />
+                            </svg>
+                            <svg v-else-if="progress > 0 && progress < 100" class="size-5 animate-spin text-blue-400"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            <svg v-else width="16" height="11" viewBox="0 0 16 16" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
                                     d="M8.88877 7.24444V0.888889C8.88877 0.653141 8.79512 0.427048 8.62843 0.260349C8.46173 0.0936505 8.23563 0 7.99989 0C7.76414 0 7.53805 0.0936505 7.37135 0.260349C7.20465 0.427048 7.111 0.653141 7.111 0.888889V7.24444L5.13766 4.77689C5.06615 4.68169 4.97624 4.60183 4.87326 4.54205C4.77029 4.48227 4.65636 4.44379 4.53823 4.42889C4.4201 4.41398 4.30018 4.42297 4.18559 4.4553C4.07099 4.48763 3.96407 4.54266 3.87115 4.61711C3.77823 4.69157 3.70122 4.78393 3.64468 4.88872C3.58815 4.9935 3.55324 5.10858 3.54203 5.22712C3.53083 5.34566 3.54355 5.46524 3.57944 5.57877C3.61534 5.69229 3.67368 5.79745 3.751 5.888L7.30655 10.3324C7.38984 10.4363 7.49538 10.52 7.61539 10.5776C7.73539 10.6352 7.86679 10.6651 7.99989 10.6651C8.13298 10.6651 8.26438 10.6352 8.38439 10.5776C8.50439 10.52 8.60993 10.4363 8.69322 10.3324L12.2488 5.888C12.3261 5.79745 12.3844 5.69229 12.4203 5.57877C12.4562 5.46524 12.4689 5.34566 12.4577 5.22712C12.4465 5.10858 12.4116 4.9935 12.3551 4.88872C12.2986 4.78393 12.2215 4.69157 12.1286 4.61711C12.0357 4.54266 11.9288 4.48763 11.8142 4.4553C11.6996 4.42297 11.5797 4.41398 11.4615 4.42889C11.3434 4.44379 11.2295 4.48227 11.1265 4.54205C11.0235 4.60183 10.9336 4.68169 10.8621 4.77689L8.88877 7.24444Z"
@@ -174,6 +189,8 @@
                                     fill="#343434" />
                             </svg>
 
+
+
                         </div>
                     </div>
                 </div>
@@ -182,7 +199,7 @@
                     <ul v-if="sessions.length > 0">
                         <li @click.stop="selectSession(session)" v-for="(session, index) in sessions"
                             class="flex items-center justify-between cursor-pointer  transition group py-4 gap-2 border-b-2 border-[#F94B65] border-dashed">
-                            <h3 class="text-base text-gray-700 font-semiobld leading-[32px] group-hover:text-[#F94B65]">
+                            <h3 class="text-base text-gray-700 font-semiobld leading-8 group-hover:text-[#F94B65]">
                                 {{
                                     session.title_eng }}</h3>
                             <div>
@@ -197,7 +214,7 @@
                         </li>
                     </ul>
                     <div v-else
-                        class="h-[120px] mt-[96px] flex flex-col items-center justify-center lg:col-span-12 lg:text-center">
+                        class="h-[120px] mt-24 flex flex-col items-center justify-center lg:col-span-12 lg:text-center">
                         <svg class="h-full animate-spin" viewBox="0 0 68 68" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path d="M34 8.5C48.0817 8.5 59.5 19.9183 59.5 34" stroke="#F94B65" stroke-width="4"
@@ -229,7 +246,8 @@
         <!-- top nav bar -->
 
         <StickySession :viewSessionObject="viewSessionObject" :sessions="sessions" @selectSession="selectSession"
-            @selectSubsession="selectSubSession">
+            @selectSubsession="selectSubSession" @saveCourse="saveCourse()" :progress="progress"
+            :saveStatusText="saveStatusText" :courseSavedAt="course.savedAt">
         </StickySession>
     </div>
 
@@ -244,7 +262,7 @@ import { convertJsonContent } from '@/composible/convertJsonContent';
 import { converToHTML } from '@/composible/convertToHTML';
 import { useStrategicStore } from '@/stores/strategicStore';
 import { motion } from 'motion-v';
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, toRaw, watch } from 'vue'
 import { useRoute } from 'vue-router';
 
 
@@ -258,6 +276,7 @@ const viewSessionObject = ref({
 const readView = ref(null)
 const title = ref("");
 const content = ref("");
+const progress = ref(0);
 
 onMounted(async () => {
     if (strategicStore.courses.length === 0) {
@@ -270,6 +289,8 @@ onMounted(async () => {
         })
 
         await strategicStore.fetchSessionsData(route.params.id).then(async (res) => {
+
+
             if (res.status === 200) {
                 const sessionsWithSubs = await Promise.all(
                     res.data.sessions.map(async (session) => {
@@ -288,6 +309,16 @@ onMounted(async () => {
 
             }
         });
+    }
+})
+
+const saveStatusText = computed(() => {
+    if (course.value.savedAt || progress.value === 100) {
+        return 'SAVED'
+    } else if (progress.value > 0 && progress.value < 100) {
+        return `Saving ${progress.value}%`
+    } else {
+        return 'Save'
     }
 })
 
@@ -342,8 +373,6 @@ const goToPrevious = () => {
 
 // script setup
 watch(viewSessionObject, async (newValue, oldValue) => {
-
-
     if (newValue.type === 'subsession') {
         await strategicStore.fetchSubSession(newValue.id).then(res => {
             if (res.status === 200) {
@@ -355,6 +384,7 @@ watch(viewSessionObject, async (newValue, oldValue) => {
         })
     } else {
         await strategicStore.fetchSession(newValue.id).then(res => {
+            console.log('Resp res.data.session : ', res.data.session);
             if (res.status === 200) {
                 let session = res.data.session;
                 title.value = session.title_eng;
@@ -373,6 +403,43 @@ watch(viewSessionObject, async (newValue, oldValue) => {
 }, { deep: true })
 
 
+
+
+function saveCourse() {
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+
+        console.log("Click Save : ", toRaw(course.value));
+
+        navigator.serviceWorker.controller.postMessage({
+            type: 'SAVE_COURSE',
+            payload: toRaw(course.value),
+        })
+        progress.value = 0
+    } else {
+        console.warn('Service worker not active')
+    }
+}
+
+// ✅ Listen for progress updates
+function handleSWMessage(event) {
+    const { type, progress: pct, courseId } = event.data || {}
+
+    if (type === 'SAVE_PROGRESS' && courseId === course.value.id) {
+        progress.value = pct
+    }
+    if (type === 'SAVE_DONE' && courseId === course.value.id) {
+        console.log("SAVING DONE");
+
+        progress.value = 100
+    }
+}
+
+onMounted(() => {
+    navigator.serviceWorker?.addEventListener('message', handleSWMessage)
+})
+onBeforeUnmount(() => {
+    navigator.serviceWorker?.removeEventListener('message', handleSWMessage)
+})
 </script>
 
 <style scoped></style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-8 md:my-12 mx-4 md:mx-[96px] lg:mx-[240px]">
+    <div class="mt-8 md:my-12 mx-4 md:mx-24 lg:mx-60">
         <div class="flex gap-4">
             <div>
                 <RouterLink to="/Strategies">

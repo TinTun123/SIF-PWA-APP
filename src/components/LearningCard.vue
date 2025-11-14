@@ -37,7 +37,7 @@
 
         <div class="bg-[#F94B65] group-hover:bg-[#F94B65]/80 transition rounded-b-lg text-center p-2">
             <button class="text-white text-[14px]">Start Learning</button>
-            <button @click.stop="emits('delete', id)" class="text-white text-[14px]">Delete</button>
+
         </div>
     </div>
 </template>

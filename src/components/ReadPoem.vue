@@ -16,9 +16,9 @@
 
         <h1 class="text-white text-[24px] pl-3 border-l-3 border-[#F94B65] mt-4"></h1>
 
-        <div class="mt-4 flex justify-between">
+        <div class="mt-4 flex justify-start">
             <h3 class="text-base text-white font-semibold tracking-wider">-- {{ author }} --</h3>
-            <div class="border border-white rounded-full px-3 py-1 flex gap-2">
+            <!-- <div class="border border-white rounded-full px-3 py-1 flex gap-2">
                 <h3 class="text-[12px] text-white">Save</h3>
                 <div>
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -31,12 +31,12 @@
                     </svg>
 
                 </div>
-            </div>
+            </div> -->
 
         </div>
 
 
-        <div class="text-white text-base mt-4 leading-[32px] overflow-y-auto flex-1 md:flex-none lg:flex-1 pr-2 hide-scrollbar whitespace-pre-wrap 
+        <div class="text-white text-base mt-4 leading-8 hide-scroll overflow-y-auto flex-1 md:flex-none lg:flex-1 pr-2 hide-scrollbar whitespace-pre-wrap 
             columns-1 md:columns-2 lg:columns-2 gap-12">
             <p class="text-justify">{{ passage }}
             </p>

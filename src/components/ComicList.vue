@@ -11,7 +11,7 @@
         <h3 class="text-white text-base md:text-[20px]">Loading ...</h3>
     </div>
 
-    <TeleportModal myClass="m-0 p-0 bg-none h-[80%]" :show="open" @close="open = false">
+    <TeleportModal myClass="m-0 p-0 bg-none h-[80%] lg:h-auto" :show="open" @close="open = false">
         <ReadComic :imgs="imgs" :date="date"></ReadComic>
     </TeleportModal>
 </template>
@@ -34,6 +34,7 @@ onMounted(async () => {
         await strategicStore.fetchComicsAll();
     }
 })
+
 
 function selectComic(comic) {
     imgs.value = JSON.parse(comic.images);
